@@ -96,7 +96,7 @@ $(document).ready(function(){
 			data: data
 		}).done(function(msg){
 			console.log(msg);
-			addEntry(reading,date,time);
+			addEntry(reading,date,time,true);
 			clearForm();
 			
 		});
@@ -131,12 +131,16 @@ function addEntries(data){
 	}
 }
 
-function addEntry(reading,date,time){
+function addEntry(reading,date,time,prepend){
 	var entry = $(document.createElement('div'));
 	var content = '<span class="reading">'+reading+'</span><span class="date">'+date+'</span><span>'+time+'</span>';
 	entry.html(content);
-
-	$('#entries').prepend(entry);
+	if(prepend){
+		$('#entries').prepend(entry);	
+	} else {
+		$('#entries').append(entry);
+	}
+	
 
 	
 }
