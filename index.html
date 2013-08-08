@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Databetic</title>
+	<meta name="robots" content="noindex">
+	<link rel="icon" type="image/png" href="favicon.ico">
+
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -16,6 +20,7 @@ form {
 	padding-left:5%;
 	margin: 0;
 	box-sizing: content-box;
+	max-width: none;
 }
 legend {
 	margin-bottom: 0;
@@ -54,6 +59,17 @@ input[type="time"],input[type="date"]{
 	margin-left: 5px;
 }
 
+.reading {
+	font-weight: bold;
+	width: 30px;
+	display: inline-block;
+}
+.date {
+	margin-left: 12px;
+	display: inline-block;
+	margin-right: 10px;
+}
+
 </style>
 <script>
 $(document).ready(function(){
@@ -63,11 +79,16 @@ $(document).ready(function(){
 
 	timeIsNow();
 
+	getAllEntries();
+
 	$('#bgForm').submit(function(event){
 		event.preventDefault();
 		console.log('sumbitting formeh?');
+		var reading = $('#bgNumber').val(),
+			date = $('#bgDate').val();
+			time = $('#bgTime').val();
 
-		var data = {'reading':$('#bgNumber').val(),'date':$('#bgDate').val(),'time':$('#bgDate').val()};
+		var data = {'reading':reading,'date':date,'time':time};
 
 		$.ajax({
 			type: 'POST',
@@ -75,16 +96,55 @@ $(document).ready(function(){
 			data: data
 		}).done(function(msg){
 			console.log(msg);
+			addEntry(reading,date,time);
+			clearForm();
+			
 		});
 
 	});
 
 });
 
+function clearForm(){
+	$('#bgNumber').val('');
+	timeIsNow();	
+}
+
+function getAllEntries(){
+	$.ajax({
+			type: 'POST',
+			url: "/databetic/api/get.php",
+			data: ''
+		}).done(function(msg){
+			console.log(msg);
+			var data = $.parseJSON(msg);
+			console.log(data);
+			addEntries(data);
+		});	
+}
+
+function addEntries(data){
+	for (var i = 0; i< data.length; i++) {
+		var time = data[i].time.split(':');
+		time = time[0] + ':' + time[1];
+		addEntry(data[i].reading,data[i].date,time);
+	}
+}
+
+function addEntry(reading,date,time){
+	var entry = $(document.createElement('div'));
+	var content = '<span class="reading">'+reading+'</span><span class="date">'+date+'</span><span>'+time+'</span>';
+	entry.html(content);
+
+	$('#entries').prepend(entry);
+
+	
+}
+
 function timeIsNow(){
 	var d = new Date();
 
-	var date = d.getFullYear() + '-' + formatNumberWithZeros(d.getMonth()) + '-' + formatNumberWithZeros(d.getDate());
+	var date = d.getFullYear() + '-' + formatNumberWithZeros(d.getMonth()+1) + '-' + formatNumberWithZeros(d.getDate());
 	var time = formatNumberWithZeros(d.getHours()) + ':' + formatNumberWithZeros(d.getMinutes());
 
 	document.getElementById('bgDate').value = date;
@@ -120,6 +180,9 @@ function formatNumberWithZeros(n){
 		</div>
 		<div class="row">
 			<h3>Previous Entries</h3>
+			<div class="col12" id="entries">
+
+			</div>
 		</div>
 	</div>
 </body>
