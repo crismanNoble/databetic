@@ -8,9 +8,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+form {
+	margin-top: 1em;
+}
 .container {
 	width: 90%;
 	padding-left:5%;
+	margin: 0;
+	box-sizing: content-box;
 }
 legend {
 	margin-bottom: 0;
@@ -58,6 +63,22 @@ $(document).ready(function(){
 
 	timeIsNow();
 
+	$('#bgForm').submit(function(event){
+		event.preventDefault();
+		console.log('sumbitting formeh?');
+
+		var data = {'reading':$('#bgNumber').val(),'date':$('#bgDate').val(),'time':$('#bgDate').val()};
+
+		$.ajax({
+			type: 'POST',
+			url: "/databetic/api/add.php",
+			data: data
+		}).done(function(msg){
+			console.log(msg);
+		});
+
+	});
+
 });
 
 function timeIsNow(){
@@ -89,7 +110,7 @@ function formatNumberWithZeros(n){
 						<legend>New Entry</legend>
 					</fieldset>
 					<label for="bgNumber">Reading</label>
-					<input type="number" name="bgNumber" class="form-control"/>
+					<input type="number" name="bgNumber" id="bgNumber" class="form-control"/>
 					<label for="bgDateTime">Date & Time <span id="now" class="link">now</span></label>
 					<input type="date" name="bgDate" id="bgDate" class="form-control" />
 					<input type="time" name="bgTime" id="bgTime" class="form-control"/>
