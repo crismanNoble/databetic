@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+.container {
+	width: 90%;
+	padding-left:5%;
+}
+legend {
+	margin-bottom: 0;
+}
+label {
+	display: block;
+	
+}
+label{
+	margin-top: .8em;
+}
+input[type="submit"]{
+	display: block;
+	width: 100%;
+	margin-top: 1em;
+}
+input[type="date"]{ 
+	margin-right: 2%;
+}
+input[type="time"] {
+	float: right;
+}
+input[type="time"],input[type="date"]{
+	display: inline-block;
+	width: 48%;
+}
+.link {
+	color: #428bca;
+	text-decoration: underline;
+	font-weight: normal;
+	font-style: italic;
+	cursor: pointer;
+}
+
+#now {
+	margin-left: 5px;
+}
+
+</style>
+<script>
+$(document).ready(function(){
+	$('#now').click(function(){
+		timeIsNow();
+	});
+
+	timeIsNow();
+
+});
+
+function timeIsNow(){
+	var d = new Date();
+
+	var date = d.getFullYear() + '-' + formatNumberWithZeros(d.getMonth()) + '-' + formatNumberWithZeros(d.getDate());
+	var time = formatNumberWithZeros(d.getHours()) + ':' + formatNumberWithZeros(d.getMinutes());
+
+	document.getElementById('bgDate').value = date;
+	document.getElementById('bgTime').value = time;
+
+}
+
+function formatNumberWithZeros(n){
+	if (n<10) {
+		return '0' + n;
+	} else {
+		return n;
+	}
+}
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col12">
+				<form id="bgForm" class="form-Horizontal">
+					<fieldset>
+						<legend>New Entry</legend>
+					</fieldset>
+					<label for="bgNumber">Reading</label>
+					<input type="number" name="bgNumber" class="form-control"/>
+					<label for="bgDateTime">Date & Time <span id="now" class="link">now</span></label>
+					<input type="date" name="bgDate" id="bgDate" class="form-control" />
+					<input type="time" name="bgTime" id="bgTime" class="form-control"/>
+					<input type="submit" class="btn btn-default">
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<h3>Previous Entries</h3>
+		</div>
+	</div>
+</body>
+</html>
