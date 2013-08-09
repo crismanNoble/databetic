@@ -1,0 +1,57 @@
+form {
+	margin-top: 1em;
+}
+.container {
+	width: 90%;
+	padding-left:5%;
+	margin: 0;
+	box-sizing: content-box;
+	max-width: none;
+}
+legend {
+	margin-bottom: 0;
+}
+label {
+	display: block;
+	
+}
+label{
+	margin-top: .8em;
+}
+input[type="submit"]{
+	display: block;
+	width: 100%;
+	margin-top: 1em;
+}
+input[type="date"]{ 
+	margin-right: 2%;
+}
+input[type="time"] {
+	float: right;
+}
+input[type="time"],input[type="date"]{
+	display: inline-block;
+	width: 48%;
+}
+.link {
+	color: #428bca;
+	text-decoration: underline;
+	font-weight: normal;
+	font-style: italic;
+	cursor: pointer;
+}
+
+#now {
+	margin-left: 5px;
+}
+
+.reading {
+	font-weight: bold;
+	width: 30px;
+	display: inline-block;
+}
+.date {
+	margin-left: 12px;
+	display: inline-block;
+	margin-right: 10px;
+}

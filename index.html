@@ -4,166 +4,18 @@
 	<title>Databetic</title>
 	<meta name="robots" content="noindex">
 	<link rel="icon" type="image/png" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="js/lib/jquery.js" type="text/javascript"></script>
+	<script src="js/lib/d3.v3.min.js" type="text/javascript"></script>
 
-<style>
-form {
-	margin-top: 1em;
-}
-.container {
-	width: 90%;
-	padding-left:5%;
-	margin: 0;
-	box-sizing: content-box;
-	max-width: none;
-}
-legend {
-	margin-bottom: 0;
-}
-label {
-	display: block;
-	
-}
-label{
-	margin-top: .8em;
-}
-input[type="submit"]{
-	display: block;
-	width: 100%;
-	margin-top: 1em;
-}
-input[type="date"]{ 
-	margin-right: 2%;
-}
-input[type="time"] {
-	float: right;
-}
-input[type="time"],input[type="date"]{
-	display: inline-block;
-	width: 48%;
-}
-.link {
-	color: #428bca;
-	text-decoration: underline;
-	font-weight: normal;
-	font-style: italic;
-	cursor: pointer;
-}
+	<script src="js/timing.js" type="text/javascript"></script>
+	<script src="js/databetic.js" type="text/javascript"></script>
 
-#now {
-	margin-left: 5px;
-}
-
-.reading {
-	font-weight: bold;
-	width: 30px;
-	display: inline-block;
-}
-.date {
-	margin-left: 12px;
-	display: inline-block;
-	margin-right: 10px;
-}
-
-</style>
-<script>
-$(document).ready(function(){
-	$('#now').click(function(){
-		timeIsNow();
-	});
-
-	timeIsNow();
-
-	getAllEntries();
-
-	$('#bgForm').submit(function(event){
-		event.preventDefault();
-		console.log('sumbitting formeh?');
-		var reading = $('#bgNumber').val(),
-			date = $('#bgDate').val();
-			time = $('#bgTime').val();
-
-		var data = {'reading':reading,'date':date,'time':time};
-
-		$.ajax({
-			type: 'POST',
-			url: "/databetic/api/add.php",
-			data: data
-		}).done(function(msg){
-			console.log(msg);
-			addEntry(reading,date,time,true);
-			clearForm();
-			
-		});
-
-	});
-
-});
-
-function clearForm(){
-	$('#bgNumber').val('');
-	timeIsNow();	
-}
-
-function getAllEntries(){
-	$.ajax({
-			type: 'POST',
-			url: "/databetic/api/get.php",
-			data: ''
-		}).done(function(msg){
-			console.log(msg);
-			var data = $.parseJSON(msg);
-			console.log(data);
-			addEntries(data);
-		});	
-}
-
-function addEntries(data){
-	for (var i = 0; i< data.length; i++) {
-		var time = data[i].time.split(':');
-		time = time[0] + ':' + time[1];
-		addEntry(data[i].reading,data[i].date,time);
-	}
-}
-
-function addEntry(reading,date,time,prepend){
-	var entry = $(document.createElement('div'));
-	var content = '<span class="reading">'+reading+'</span><span class="date">'+date+'</span><span>'+time+'</span>';
-	entry.html(content);
-	if(prepend){
-		$('#entries').prepend(entry);	
-	} else {
-		$('#entries').append(entry);
-	}
-	
-
-	
-}
-
-function timeIsNow(){
-	var d = new Date();
-
-	var date = d.getFullYear() + '-' + formatNumberWithZeros(d.getMonth()+1) + '-' + formatNumberWithZeros(d.getDate());
-	var time = formatNumberWithZeros(d.getHours()) + ':' + formatNumberWithZeros(d.getMinutes());
-
-	document.getElementById('bgDate').value = date;
-	document.getElementById('bgTime').value = time;
-
-}
-
-function formatNumberWithZeros(n){
-	if (n<10) {
-		return '0' + n;
-	} else {
-		return n;
-	}
-}
-</script>
 </head>
 <body>
 	<div class="container">
